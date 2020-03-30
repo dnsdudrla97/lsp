@@ -41,6 +41,9 @@ static int read_file(void)
 	printf("after fopen(). offset=%ld\n", ftell(fp));
 	memset(buf, 0, sizeof(buf));
 	fgets(buf, sizeof(buf), fp);
+	for (int i = 0; i < sizeof(buf); i++) {
+		printf("%c",buf[i]);
+	}
 	printf("after fgets(). offset=%ld\n", ftell(fp));
 	
 	fseek(fp, 0, SEEK_END);	// 파일의 끝을 기준으로 옵셋이 0
