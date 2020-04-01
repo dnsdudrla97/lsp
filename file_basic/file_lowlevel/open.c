@@ -25,6 +25,7 @@ static int append_file(void)
     return (0);
 }
 
+/* 파일 데이터가 존재시 0으로 초기화 하고 다시 작성*/
 static int trunc_file(void)
 {
     int fd;
