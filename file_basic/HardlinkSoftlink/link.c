@@ -18,5 +18,6 @@ int main(int argc, char** argv)
         printf("symlink() fail\n");
         return (-1);
     }
+    
     return (0);
 }
