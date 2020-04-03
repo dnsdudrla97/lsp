@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 
 /*LowLevel 파일 쓰기 구조체를 주로 사용함*/
 struct person
@@ -42,47 +43,38 @@ static int write_info(struct person* p) {
     return (0);
 }
 
-/*LowLevel 파일 열어서 strut person 만큼씩 데이터를 읽어서 화면에 출력*/
+/*mmap*/
 static int dump_info(void) {
     int fd;
-    ssize_t ret;    /* ssize_t */
-    struct person p;
+    struct stat sb;
+    struct person* p;
+    int i;
 
     fd = open("person_info", O_RDONLY);
     if (fd == -1) {
-        printf("open() faill\n");
-        return -1;
+        printf("open() fail\n");
+        return (-1);
     }
 
-    do {
-		/* read함수로 구조체 p 에 데이터를 할당*/
-        ret = read(fd, &p, sizeof(struct person));
-        if (ret == -1) {
-            printf("read() faile\n");
-            close(fd);
-            return (-1);
-        }
-        else if (ret == 0) {       /*EOF 시 0을 반환*/
-            FILE* fp;     /*0 반환시 파일의 끝의 주소값을 알기 위해서 파일 포인터 사용*/
-            fp = fdopen(fd, "r"); /*파일 디스크립터 → 파일 포인터 변환*/
-            if (fp == NULL) {
-                printf("fdopen() fail\n");
-                close(fd);
-                return (-1);
-            }
-            printf("file position = %ld\n",ftell(fp)); /* frell() 현재 파일의 오프셋 위치 */
-            fclose(fp);
-            break;
-        }
-				/*해당하는 사이즈 개수 만큼 안나왔을때 예외처리*/
-        else if (ret != sizeof(struct person)) {
-			
-            printf("read() faile(partial read)\n");  
-            close(fd);
-            return (-1);
-        }
-        printf("name : %s, age : %d\n",p.name, p.age);
-    } while(1);
+    if (fstat(fd, &sb) == -1) {
+        printf("stat() fail\n");
+        close(fd);
+        return (-1);
+    }
+
+    /*void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset); */
+    p = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    if (p == MAP_FAILED) {
+        printf("mmap() fail\n");
+        close(fd);
+        return (-1);
+    }
+    /* 파일 전체에 대해서 하나의 메모리 주소를 매핑을 해와서 실제
+     메모리 상에 있는 데이터구조를 조작하는 것처럼, 
+     p라는 포인터를 이용해서 파일의 이곳저곳을 탐색할 수 있다. */
+    for (i = 0; i < sb.st_size / sizeof(struct person); i++) {
+        printf("name: %s, age: %d\n",p[i].name, p[i].age);
+    }
 
     close(fd);
     return (0);
@@ -93,7 +85,7 @@ int main(int argc, char** argv) {
         { "Namin", 24 },
         { "Woon", 30 },
     };
-
+    /* byte stream 저장 */
     write_info(&persons[0]);
     write_info(&persons[1]);
 
