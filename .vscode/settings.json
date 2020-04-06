@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "file.h": "c"
+        "file.h": "c",
+        "inotify.h": "c"
     }
 }
