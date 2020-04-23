@@ -22,8 +22,11 @@ int main(int argc, char** argv) {
 
     printf("filename: %s\n", argv[1]);
     printf("size: %ld\n", statbuf.st_size);
+    printf("inode: %ld\n", statbuf.st_ino);
+    printf("uid: %d\n", statbuf.st_uid);
+    printf("gid: %d\n", statbuf.st_gid);
     
-    /* 파일 타입을 확인*/
+   /* 파일 타입을 확인*/
     if (S_ISDIR(statbuf.st_mode)) {
         printf("it is directory\n");
     } else if (S_ISREG(statbuf.st_mode)) {

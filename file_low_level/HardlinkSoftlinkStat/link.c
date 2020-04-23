@@ -10,6 +10,9 @@ int main(int argc, char** argv)
 {
     #define TARGET_FILE "hello_world" /*Hello_world file -> SL, HL*/
 
+    unlink("hello_by_link");
+    unlink("hello_by_symlink");
+
     if (link(TARGET_FILE, "hello_by_link")) {
         printf("link() fail\n");
         return (-1);
@@ -21,3 +24,4 @@ int main(int argc, char** argv)
     
     return (0);
 }
+

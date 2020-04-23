@@ -28,6 +28,7 @@ static int write_info(struct person* p) {
         printf("write() fail\n");
         close(fd);
         return (-1);
+	/*count보다 작을 수 있다. (return 값이 count와 동일한지 체크)*/
     } else if (ret != sizeof(struct person)) {
         printf("write() faile partial write\n");
         close(fd);
@@ -57,9 +58,10 @@ static int dump_info(void) {
             close(fd);
             return (-1);
         }
-        else if(ret == 0) {
-            FILE* fp;
-            fp = fdopen(fd, "r");
+        else if(ret == 0) {     /*return = 0 -> 파일의 끝을 만났을때*/
+			
+    	    FILE* fp;		/*ftell() API 사용을 위해서 선언*/
+            fp = fdopen(fd, "r");           /*fdopen(fd, "r") -> fd -> fp read*/
             if (fp == NULL) {
                 printf("fdopen() fail\n");
                 close(fd);
@@ -69,7 +71,7 @@ static int dump_info(void) {
             fclose(fp);
             break;
         }
-        else if (ret != sizeof(struct person)) {
+        else if (ret != sizeof(struct person)) {	/*return count 가 다를때*/
             printf("read() fail(partial read)\n");
             close(fd);
             return(-1);

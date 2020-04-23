@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     struct dirent* entry;
 
     /* 현재 디렉터리 오픈*/
-    dp = opendir("..");
+    dp = opendir("..");		/*성공시 열린 디렉터리 스트림 포인터(디렉터리 핸들러)*/
     if (dp == NULL) {
         printf("opendir() fail\n");
         return (-1);

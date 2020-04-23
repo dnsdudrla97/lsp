@@ -63,6 +63,7 @@ static int dump_info(void) {
     }
 
     /*void *mmap(void *addr, size_t length, int prot, int flags,int fd, off_t offset); */
+    /* return 성공시 mapping된 주소 / 실패시 MAP_FAILED */
     p = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
     if (p == MAP_FAILED) {
         printf("mmap() fail\n");
@@ -84,10 +85,20 @@ int main(int argc, char** argv) {
     struct person persons[] = {
         { "Namin", 24 },
         { "Woon", 30 },
+	{ "this", 20 },
+	{ "solder", 10 },
+	{ "pubal", 34 },
+	{ "valas", 12 },
+	{ "lawer", 10 },
     };
     /* byte stream 저장 */
     write_info(&persons[0]);
     write_info(&persons[1]);
+    write_info(&persons[2]);
+    write_info(&persons[3]);
+    write_info(&persons[4]);
+    write_info(&persons[5]);
+    write_info(&persons[6]);
 
     dump_info();
 
