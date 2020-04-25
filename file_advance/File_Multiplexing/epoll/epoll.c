@@ -75,6 +75,10 @@ int main(int argc, char **argv)
     /*epoll - control 2*/
     memset(&eevent, 0, sizeof(eevent));
     /*data : epoll wati 에서 그대로 값을 넣는다.*/
+    /*
+    epoll_ctl 설정전에 event 감시 이벤트를 명시해 주기위해 값을 설정한다.
+    events = 이벤트 마스크, data.__ = 감시 대상 fd
+    */
     eevent.events = EPOLLIN;
     eevent.data.fd = fd;
     if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &eevent) == -1)
@@ -99,6 +103,7 @@ int main(int argc, char **argv)
         /*epoll_wait*/  
         /*timeout : 5초*/
         memset(&eevent, 0, sizeof(eevent));
+        /*epoll_wait(epoll instance, 이벤트를 담을 구조체 버퍼, 이벤트 변수의 최대 엔트리 개수, blockingtimeout*/
         ret = epoll_wait(epfd, &eevent, 1, 5000);
 
         if (ret == -1)
@@ -111,7 +116,7 @@ int main(int argc, char **argv)
         }
         else if (ret > 0)
         {
-            
+            /*이벤트 구조체 멤버 data.fd와 값을 비교하여 일치하는지 체크*/
             if (eevent.data.fd == fd)
             {
 
