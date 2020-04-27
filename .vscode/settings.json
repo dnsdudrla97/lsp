@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "file.h": "c",
-        "inotify.h": "c"
+        "inotify.h": "c",
+        "string.h": "c",
+        "sched.h": "c"
     }
 }
