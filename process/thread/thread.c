@@ -16,7 +16,7 @@ void *child_thread_main(void *arg)
     unsigned int i;
     
     /*동작중인 thread*/
-    printf("child pthread id %ld\n", pthread_self());
+    printf("created pthread id %ld\n", pthread_self());
 
     /*Critical Section 짐입시 lock, 나올시 unlock*/
     pthread_mutex_lock(&mutex);
